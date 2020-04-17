@@ -24,57 +24,57 @@ class Splash extends StatelessWidget {
               Expanded(
                 child: Container(),
               ),
-              Text(
-                "Best \nExperiences".toUpperCase(),
-                style: TextStyle(
-                  fontSize: 39,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 2
-                ),
-              ),
-              Text(
-                "Immerse yourself with cultures and \nexperiences from across the world.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  letterSpacing: 2,
-                  height: 2
-                  
-                ),
-              ),
+              ..._title //Title Mesage
+              ,
               SizedBox(
                 height: MediaQuery.of(context).size.height * .5,
               ),
               Expanded(
                 child: Container(),
               ),
-              Center(
-                child: InkWell(
-                  onTap: ()=>{},
-                                  child: Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 55,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFFEC62E),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Center(
-                      child: Text(
-                        "Start Exploring".toUpperCase(),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              _callToActionBtn(context) // bottom call to action button
             ],
           ),
         ),
       ),
     );
   }
+}
+
+List<Text> _title = [
+  Text(
+    "Best \nExperiences".toUpperCase(),
+    style: TextStyle(
+        fontSize: 39,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        letterSpacing: 2),
+  ),
+  Text(
+    "Immerse yourself with cultures and \nexperiences from across the world.",
+    style: TextStyle(
+        color: Colors.white, fontSize: 13, letterSpacing: 2, height: 2),
+  )
+];
+
+Center _callToActionBtn(context) {
+  return Center(
+    child: InkWell(
+      onTap: () => {Navigator.of(context).pushReplacementNamed("/home")},
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: 55,
+        decoration: BoxDecoration(
+            color: Color(0xFFFEC62E), borderRadius: BorderRadius.circular(30)),
+        child: Center(
+          child: Text(
+            "Start Exploring".toUpperCase(),
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+        ),
+      ),
+    ),
+  );
 }
