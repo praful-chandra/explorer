@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class BottomNavBar extends StatefulWidget {
   BottomNavBar({Key key}) : super(key: key);
@@ -10,76 +9,78 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  var selectedIndex = 0;
+  var _selectedIndex = 0;
 
-  void selectItem(int i) {
+  final tabs = [
+    {"icon": Icons.explore, "title": "Explore"},
+    {"icon": Icons.notifications, "title": "Alerts"},
+    {"icon": Icons.favorite, "title": "Likes"}
+  ];
+
+  void switchTab(index) {
     setState(() {
-      selectedIndex = i;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Container(
+      height: size.height * 0.1,
+      padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40), topRight: Radius.circular(40))),
-      height: MediaQuery.of(context).size.height * 0.1,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _populateNavTabs(context, selectedIndex, selectItem),
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(60), topRight: Radius.circular(60)),
       ),
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: tabs.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () => switchTab(index),
+              child: index == _selectedIndex
+                  ? selectedTab(tabs[index]["title"], tabs[index]["icon"], size)
+                  : notSelectedTab(tabs[index]["icon"], size),
+            );
+          }),
     );
   }
 }
 
-List<Widget> _populateNavTabs(
-    BuildContext context, int selectedIndex, Function cb) {
-  return [
-    InkWell(
-      onTap: () => cb(0),
-      child: tabChild(context, "Explore", Icons.explore, selectedIndex, 0),
+Widget selectedTab(String title, IconData icon, Size size) {
+  return Container(
+    width: size.width * 0.4,
+    margin: EdgeInsets.only(left: 10),
+    child: Row(
+      children: <Widget>[
+        Icon(
+          icon,
+          color: Color(0xff90C9D4),
+          size: 30,
+        ),
+        Text(
+          title,
+          style: TextStyle(color: Color(0xff90C9D4), fontSize: 16),
+        )
+      ],
     ),
-    InkWell(
-      onTap: () => cb(1),
-      child: tabChild(context, "Alerts", Icons.notifications, selectedIndex, 1),
-    ),
-    InkWell(
-      onTap: () => cb(2),
-      child: tabChild(context, "Liked", Icons.favorite, selectedIndex, 2),
-    ),
-  ];
+  );
 }
 
-Widget tabChild(
-    BuildContext context, String title, IconData icon, int index, int itemNum) {
-  return AnimatedContainer(
-      duration: Duration(milliseconds: 250),
-      width: index == itemNum
-          ? MediaQuery.of(context).size.width * 0.4
-          : MediaQuery.of(context).size.width * 0.1,
-      decoration: BoxDecoration(),
-      child: Row(
-        children: <Widget>[
-          Icon(
-            icon,
-            color: index == itemNum ? Color(0xff90C9D4) : Color(0xffacacac),
-            size: index == itemNum ? 30 : 20,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          index == itemNum
-              ? Text(
-                  title,
-                  style: TextStyle(
-                    color: Color(0xff90C9D4),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14
-                  ),
-                )
-              : SizedBox()
-        ],
-      ));
+Widget notSelectedTab(IconData icon, Size size) {
+  return Container(
+    width: size.width * 0.1,
+    margin: EdgeInsets.all(10),
+    child: Row(
+      children: <Widget>[
+        Icon(
+          icon,
+          color: Color(0xffACACAC),
+        ),
+      ],
+    ),
+  );
 }

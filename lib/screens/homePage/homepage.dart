@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './components/header.dart';
 import './components/tabs.dart';
 import './components/bottomNavBar.dart';
+import './components/mainGrid.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -24,14 +25,24 @@ class Body extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 25),
       child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Header(),
-            Tabs(),
-
-          ],
-        ),
+          child: RefreshIndicator(
+            onRefresh: (){
+              return Future.delayed(Duration(seconds: 2));
+            },
+                      child: CustomScrollView(
+        slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: Column(
+                children: <Widget>[
+                  Header(),
+                  Tabs(),
+                ],
+              ),
+            ),
+            MainGrid()
+        ],
       ),
+          )),
     );
   }
 }
